@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 
 namespace LethalESP
 {
@@ -36,6 +37,21 @@ namespace LethalESP
                 if (!LethalESP.Instance.Landmines.Contains(__instance))
                 {
                     LethalESP.Instance.Landmines.Add(__instance);
+                }
+            }
+        }
+
+        // 🔧 New patch to attach the ESP runner so rendering works!
+        [HarmonyPatch(typeof(HUDManager), "Start")]
+        internal static class HUDManager_Start_Patch
+        {
+            private static void Postfix(HUDManager __instance)
+            {
+                if (__instance.GetComponent<LethalESPRunner>() == null)
+                {
+                    var runner = __instance.gameObject.AddComponent<LethalESPRunner>();
+                    Object.DontDestroyOnLoad(runner);
+                    Debug.Log("[LethalESP] ESPRunner successfully attached to HUDManager.");
                 }
             }
         }

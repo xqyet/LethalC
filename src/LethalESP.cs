@@ -26,9 +26,11 @@ namespace LethalESP
         public List<Landmine> Landmines = new List<Landmine>();
 
         // ESP toggles
-        private bool EnableEnemyAIESP { get; set; } = false;
-        private bool EnableMapHazardsESP { get; set; } = false;
-        private bool EnableGrabbableObjectsESP { get; set; } = false;
+        private bool EnableEnemyAIESP { get; set; } = true;
+        private bool EnableMapHazardsESP { get; set; } = true;
+        private bool EnableGrabbableObjectsESP { get; set; } = true;
+
+
 
         public void Awake()
         {
@@ -44,6 +46,7 @@ namespace LethalESP
             // Enable hooks for tracking game object spawning
             Harmony harmony = new Harmony(Guid.NewGuid().ToString());
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+            
         }
 
         public void OnGUI()
@@ -72,8 +75,10 @@ namespace LethalESP
             }
         }
 
-        public void Update()
+        public void UpdateESP()
         {
+            Logger.LogInfo("Update is running");
+
             if (Keyboard.current.f10Key.wasPressedThisFrame)
             {
                 EnableEnemyAIESP = !EnableEnemyAIESP;
